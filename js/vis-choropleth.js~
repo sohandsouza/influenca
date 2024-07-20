@@ -1,0 +1,123 @@
+
+var mwidth = 500,
+    mheight = 500;
+var ldata = [0,1,2,3,4,5,6,7,8];
+// --> CREATE SVG DRAWING AREA
+
+var msvg = d3.select("#map-area").append("svg")
+    .attr("width", mwidth)
+    .attr("height", mheight);
+
+var projection = d3.geo.equirectangular()
+	.translate([mwidth/2, mheight/2])
+	.scale(mheight/2);
+var path = d3.geo.path()
+	.projection(projection);
+var quantize = d3.scale.quantile().domain([0, 100]).range(d3.range(9));
+var quantiles = quantize.quantiles();
+var quantilesl = [0];
+var quantilesu = [];
+quantiles.forEach(function(d,i){
+	quantilesu.push(Math.round(quantiles[i]));
+	quantilesl.push(quantilesu[i]);
+});
+quantilesu.push(100);
+var procData = {};
+var si;
+var tooltip = d3.select('body').append('div')
+            .attr('class', 'hidden tooltip');
+// Use the Queue.js library to read two files
+queue()
+  .defer(d3.json, "data/africa.topo.json")
+  .defer(d3.csv, "data/global-malaria-2015.csv")
+  .await(function(error, topData, valData){
+    console.log(topData);
+	console.log(valData);
+    // --> PROCESS DATA
+	procData = [];
+	var maxp = 0;
+	valData.forEach(function(d){
+		if((d.WHO_region == "African" || d.Code == "SOM" || d.Code == "SSF" || d.Code == "DJI") && +d.UN_population > maxp) {
+			maxp = +d.UN_population;
+		}
+	});
+	valData.forEach(function(d){
+		if (d.WHO_region == "African" || d.Code == "SOM" || d.Code == "SSF" || d.Code == "DJI") {
+			var procDatum = {};
+			procDatum.p = +d.UN_population;
+			procDatum.cmc = +d.Malaria_cases;
+			procDatum.smc = +d.Suspected_malaria_cases;
+			procDatum.pr = +d.At_risk;
+			procDatum.phr = +d.At_high_risk;
+			procDatum.r = +d.At_risk * procDatum.p/100;
+			procDatum.hr = +d.At_high_risk * procDatum.p/100;
+			procDatum.pcmc = Math.round(procDatum.cmc*100/procDatum.p);
+			procDatum.psmc = Math.round(procDatum.smc*100/procDatum.p);
+			procDatum.pp = Math.round(procDatum.p*100/maxp);
+			procData[d.Code] = procDatum;
+		}
+	});
+	console.log(procData);
+	var africa = topojson.feature(topData, topData.objects.collection).features
+	var countries = msvg.selectAll("path")
+		.data(africa)
+	countries.enter().append("path")
+		.attr("d", path)
+		.attr("class", "map-countries");
+	msvg.append("path")
+		.datum(topojson.mesh(topData, topData.objects.collection))
+		.attr("d", path)
+		.attr("fill", "none")
+		.attr("class", "subunit-boundary");
+
+	msvg.selectAll("rect").data(ldata).enter().append("rect").attr("width",10).attr("height",20).attr("x",20).attr("y",function(d,i){return 20+ i * 20;}).attr("class",function(d,i){return "q"+d+"-9"});
+	msvg.selectAll("text").data(ldata).enter().append("text").attr("x",35).attr("y",function(d,i){return 35+ i * 20;}).attr("class","map-legend-text").text(function(d,i){return (quantilesl[i]+"% - "+quantilesu[i]+"%");});
+
+	changeView(2);
+	});
+
+	var sSel = ["UN population", "Population at risk", "Population at high risk", "Suspected malaria cases","Confirmed malaria cases"];
+	var sField = ["pp", "pr", "phr", "psmc","pcmc"];
+	var sPalette = ["Purples","Greens", "Blues", "Oranges", "Reds"];
+
+
+function changeView(siparam) {
+	si = siparam;
+	console.log("SELECTED "+sSel[si]);
+	$(".view-select-label").html("AFRICA: "+sSel[si]);
+    // Update choropleth
+    updateChoropleth();
+	return false;
+}
+
+
+function updateChoropleth() {
+	var countries = msvg.selectAll(".map-countries");
+//	console.log(countries)
+	d3.select("#map-area").attr("class",sPalette[si]);
+	countries.attr("class",function(d){
+		if(!(procData[d.properties.adm0_a3_is] == undefined) && !(quantize(procData[d.properties.adm0_a3_is][sField[si]]) == undefined)) {
+			//console.log(d.properties.adm0_a3_is);
+			return ("map-countries q"+quantize(procData[d.properties.adm0_a3_is][sField[si]])+"-9");
+		} else {
+			return ("map-countries");
+		}
+	});
+	countries.on('mousemove', function(d) {
+                    var mouse = d3.mouse(msvg.node()).map(function(d) {
+                        return parseInt(d);
+                    });
+					var dat;;
+					if(!(procData[d.properties.adm0_a3_is] == undefined)) {
+						dat = procData[d.properties.adm0_a3_is][sField[si]]+"% ("+procData[d.properties.adm0_a3_is][sField[si].slice(1)].toLocaleString()+")";
+					} else {dat = "(no data)";}
+                    tooltip.classed('hidden', false)
+                        .attr('style', 'left:' + Math.max(0, d3.event.pageX - 150) +
+                                'px; top:' + (d3.event.pageY + 20) + "px")
+                        .text(d.properties.name+":"+dat);
+                })
+                .on('mouseout', function() {
+                    tooltip.classed('hidden', true);
+                });
+}
+

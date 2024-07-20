@@ -1,0 +1,222 @@
+
+/* YOUR CSS STYLES */
+	.arcs path {
+	  /*stroke-width: 2px;*/
+	  pointer-events: none;
+	  fill: none;
+	  z-index: 1000;
+	  /*opacity: 0.5;*/
+	}
+/*	.arcsout path {
+	  stroke-width: 2px;
+	  stroke: yellowgreen;
+	  pointer-events: none;
+	  fill: none;
+	  z-index: 1000;
+	}
+*/
+.view-select-label{
+	font-size:20pt;
+}
+
+.view-clear-label{
+	font-size:10pt;
+	font-weight:bold;
+	color:white;
+}
+
+.chart-label{
+	font-size:18pt;
+}
+
+.subunit-boundary {
+	stroke: darkgrey;
+	stroke-width: 1.5;
+}
+
+.map-countries {
+	fill: grey;
+}
+
+.map-legend {
+	fill: #FFFFFF;
+	stroke: #FFFFFF;
+	stroke-width: 2;
+}
+.map-legend-text {
+	fill: #FFFFFF;
+	font-weight: bold;
+	font-size: 12pt;
+}
+
+    .country {
+        fill: #000;
+        stroke: #fff;
+        stroke-width: 1px;
+    }
+    .country:hover {
+        fill: #666;
+    }
+    .hidden {
+        display: none;
+    }
+    div.tooltip {
+        color: #222;
+        background-color: #fff;
+        padding: .5em;
+        text-shadow: #f5f5f5 0 1px 0;
+        border-radius: 2px;
+        opacity: 0.9;
+        position: absolute;
+    }
+
+body {
+	background-color:#002234;
+	margin-bottom: 60px;
+	padding: 15px 15px 15px 15px;
+}
+
+#map-area {
+	border: solid 5px #0099cc;
+	background-color: #2f2f2f;
+}
+.render-area {
+	border: solid 5px #0099cc;
+	background-color: #2f2f2f;
+}
+hr {
+	color:white;
+}
+.facts {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
+	font-family: Arial, Helvetica;
+	color: white;
+	font-size: 16pt;
+}
+.notes {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: white;
+	font-family: Arial, Helvetica;
+	font-size: 12pt;
+	font-weight: bold;
+}
+.tree-link{
+	fill: none;
+	stroke-width: 3px;
+	stroke: red;
+}
+.tree-label{
+	fill: #FFFFFF;
+	font-weight: bold;
+	font-size: 12pt;
+}
+.tree-node{
+	fill: darkred;
+	stroke-width: 3px;
+	stroke: red;
+}
+
+.who-header-row {
+	font-family: Arial, Helvetica;
+	font-size:24px;
+	font-weight: bold;
+	background:white;
+	margin-bottom: 30px;
+}
+
+.who-header {
+	font-family: Arial, Helvetica;
+	margin-top: 20px;
+	font-size:32pt;
+	font-weight: bold;
+	color:#0088bb;
+}
+
+.who-subheader {
+	font-family: Arial, Helvetica;
+	margin-top: 20px;
+	font-size:14pt;
+	font-weight: bold;
+	color:#0088bb;
+}
+
+.label {
+	font-family: Arial, Helvetica;
+    background: #0099cc;
+    color: #ffffff;
+    margin: 12px 20px 10px 10px;
+    border: 0 none;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+	font-size: 12pt;
+	padding: 12px;
+}
+ 
+.btn {
+    padding: 6px 10px 10px 10px;
+    border: 0 none;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+	font-family: Arial, Helvetica;
+}
+ 
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    outline: 0 none;
+}
+ 
+.btn-primary {
+    background: #0099cc;
+    color: #ffffff;
+}
+ 
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+    background: #33a6cc;
+}
+ 
+.btn-primary:active, .btn-primary.active {
+    background: #007299;
+    box-shadow: none;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 40px;
+  background-color: #FFFFFF;
+font-weight:bold;
+}
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+.container {
+  width: auto;
+  max-width: 680px;
+  padding: 0 15px;
+}
+.container .text-muted {
+  margin: 20px 0;
+}
+
+.img-rounded {
+	border: solid 5px #0099cc;
+	margin: 50px 20px 20px 20px;
+}
